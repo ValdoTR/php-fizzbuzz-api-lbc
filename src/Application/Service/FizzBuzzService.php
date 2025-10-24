@@ -9,6 +9,10 @@ use App\Domain\ValueObject\FizzBuzzResult;
 
 final class FizzBuzzService
 {
+    public function __construct(
+        private readonly StatisticsService $statisticsService
+    ) {}
+
     public function process(
         int $int1,
         int $int2,
@@ -24,6 +28,15 @@ final class FizzBuzzService
         
         $algorithm = new FizzBuzzAlgorithm(...$rules);
         $items = $algorithm->generate($limit);
+        
+        // Track statistics
+        $this->statisticsService->recordRequest([
+            'int1' => $int1,
+            'int2' => $int2,
+            'limit' => $limit,
+            'str1' => $str1,
+            'str2' => $str2,
+        ]);
         
         return new FizzBuzzResult($items);
     }
