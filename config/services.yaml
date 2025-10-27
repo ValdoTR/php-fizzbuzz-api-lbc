@@ -4,7 +4,11 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    statistics_file_path: "%kernel.project_dir%/var/statistics.json"
+    statistics_file_path: "%kernel.project_dir%/data/statistics.json"
+
+when@test:
+    parameters:
+        statistics_file_path: "%kernel.project_dir%/data/statistics_test.json"
 
 services:
     # default configuration for services in *this* file
@@ -12,7 +16,8 @@ services:
         autowire: true # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
-            $statsFilePath: "%kernel.project_dir%/var/statistics.json"
+            $statsFilePath: "%statistics_file_path%"
+            $environment: "%kernel.environment%"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -22,7 +27,17 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    # Exception listener for API error handling
+    App\Infrastructure\EventListener\ApiExceptionListener:
+        tags:
+            - {
+                  name: kernel.event_listener,
+                  event: kernel.exception,
+                  method: onKernelException,
+              }
+
+    # Statistics repository with file path
     App\Infrastructure\Repository\StatisticsRepository:
         arguments:
             $cache: "@cache.app"
-            $statsFilePath: "%kernel.project_dir%/var/statistics.json"
+            $statsFilePath: "%statistics_file_path%"
