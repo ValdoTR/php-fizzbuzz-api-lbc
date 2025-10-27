@@ -1,0 +1,45 @@
+nelmio_api_doc:
+    documentation:
+        tags:
+            - name: FizzBuzz
+              description: FizzBuzz API operations
+
+        paths:
+            /api/fizzbuzz:
+                post:
+                    tags: [FizzBuzz]
+                    summary: Generate a FizzBuzz sequence
+                    requestBody:
+                        required: true
+                        content:
+                            application/json:
+                                schema:
+                                    $ref: "#/components/schemas/FizzBuzzRequest"
+                    responses:
+                        200:
+                            description: Successful response
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: "#/components/schemas/FizzBuzzResponse"
+                        400:
+                            description: Validation error
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: "#/components/schemas/FizzBuzzValidationError"
+
+            /api/fizzbuzz/stats:
+                get:
+                    tags: [FizzBuzz]
+                    summary: Get most frequent request
+                    responses:
+                        200:
+                            description: Successful response
+                            content:
+                                application/json:
+                                    schema:
+                                        $ref: "#/components/schemas/FizzBuzzStatsResponse"
+                        204:
+                            description: No statistics available yet
+                            content: {}

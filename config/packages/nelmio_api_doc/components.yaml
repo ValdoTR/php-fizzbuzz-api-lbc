@@ -1,0 +1,107 @@
+nelmio_api_doc:
+    documentation:
+        components:
+            schemas:
+                # POST /api/fizzbuzz
+                FizzBuzzRequest:
+                    type: object
+                    properties:
+                        int1:
+                            type: integer
+                            minimum: 1
+                            maximum: 1000
+                            example: 3
+                        int2:
+                            type: integer
+                            minimum: 1
+                            maximum: 1000
+                            example: 5
+                        limit:
+                            type: integer
+                            minimum: 1
+                            maximum: 100000
+                            example: 15
+                        str1:
+                            type: string
+                            maxLength: 50
+                            example: "fizz"
+                        str2:
+                            type: string
+                            maxLength: 50
+                            example: "buzz"
+                    required: [int1, int2, limit, str1, str2]
+
+                FizzBuzzResponse:
+                    type: object
+                    properties:
+                        result:
+                            type: array
+                            items:
+                                type: string
+                            example:
+                                [
+                                    "1",
+                                    "2",
+                                    "fizz",
+                                    "4",
+                                    "buzz",
+                                    "fizz",
+                                    "7",
+                                    "8",
+                                    "fizz",
+                                    "buzz",
+                                    "11",
+                                    "fizz",
+                                    "13",
+                                    "14",
+                                    "fizzbuzz",
+                                ]
+                        count:
+                            type: integer
+                            example: 15
+                    required: [result, count]
+
+                FizzBuzzValidationError:
+                    type: object
+                    properties:
+                        status:
+                            type: string
+                            example: "error"
+                        message:
+                            type: string
+                            example: "Validation failed"
+                        errors:
+                            type: object
+                            example: { "int1": "must be positive" }
+                    required: [status, message]
+
+                # GET /api/fizzbuzz/stats
+                FizzBuzzStatsParameters:
+                    type: object
+                    properties:
+                        int1:
+                            type: integer
+                            example: 3
+                        int2:
+                            type: integer
+                            example: 5
+                        limit:
+                            type: integer
+                            example: 15
+                        str1:
+                            type: string
+                            example: fizz
+                        str2:
+                            type: string
+                            example: buzz
+                    required: [int1, int2, limit, str1, str2]
+
+                FizzBuzzStatsResponse:
+                    type: object
+                    properties:
+                        parameters:
+                            $ref: "#/components/schemas/FizzBuzzStatsParameters"
+                        count:
+                            type: integer
+                            example: 3
+                    required: [parameters, count]
