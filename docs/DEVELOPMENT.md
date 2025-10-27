@@ -63,6 +63,15 @@ composer test:unit
 # Integration tests only
 composer test:int
 
+# Run all tests with coverage
+composer test:coverage
+
+# Run all tests with coverage HTML report
+composer test:coverage:html
+# and open in browser
+open var/coverage/index.html  # macOS
+xdg-open var/coverage/index.html  # Linux
+
 # Specific test file
 vendor/bin/phpunit tests/Unit/Domain/FizzBuzzAlgorithmTest.php
 
@@ -73,8 +82,14 @@ vendor/bin/phpunit --filter testClassicFizzBuzz
 ### 3. Check Code Quality
 
 ```bash
-# Static analysis (PHPStan level 8)
+# Static analysis fix (PHPStan level 8)
 composer code:analyse
+
+# Static analysis check
+composer code:analyse:check
+
+# Analyze specific file
+vendor/bin/phpstan analyse src/Domain/FizzBuzzAlgorithm.php
 
 # Fix code style automatically
 composer code:lint
@@ -82,13 +97,16 @@ composer code:lint
 # Check code style
 composer code:lint:check
 
+# Fix specific file
+vendor/bin/php-cs-fixer fix src/Domain/FizzBuzzAlgorithm.php
+
 # Refactor automatically
 composer code:refactor
 
 # Check refactoring
 composer code:refactor:check
 
-# Apply Safe-PHP Refactoring refactoring
+# Apply Safe-PHP Refactoring only
 composer code:refactor:safe
 ```
 
@@ -96,7 +114,7 @@ composer code:refactor:safe
 
 Open `http://localhost:8000/api/doc`.
 
-> See the full [API Documentation](docs/API.md).
+> See the full [API Documentation](../docs/API.md).
 
 ### 5. View Logs
 
@@ -123,14 +141,6 @@ symfony server:stop
 
 ## Debugging
 
-### Enable Symfony Profiler (dev only)
-
-Access at:
-
-```shell
-http://localhost:8000/_profiler
-```
-
 ### View Debug Information
 
 In `dev` environment, exceptions show full stack traces in JSON responses.
@@ -143,6 +153,34 @@ cat data/statistics.json | jq .
 
 # Clear statistics
 rm data/statistics.json
+```
+
+### Symfony Profiler
+
+You can access the built-in Symfony profiler at: <http://localhost:8000/_profiler>
+
+Perform an HHTP request a reload the page, you should be able to check important information about it.
+
+> With Xdebug enable you have much more detailed information! See next section.
+
+### Xdebug
+
+You need to [install Xdebug](https://xdebug.org/docs/install) in order to run tests with coverage, inspect variables during runtime, set breakpoints and perform step debugging.
+
+For instance, on Ubuntu, run `sudo apt-get install php8.3-xdebug`.
+
+Verify installation by running `php -v`. It should show: "with Xdebug v3.3.0".
+
+To configure it you have to edit your *php.ini*.
+
+Locate it: `php -i | grep php.ini` and add the following configuration:
+
+```ini
+[xdebug]
+zend_extension=xdebug.so
+;With mode=off, Xdebug is only loaded, but does nothing by default.
+xdebug.mode=off
+xdebug.start_with_request=trigger
 ```
 
 ## Good practices
