@@ -6,6 +6,14 @@ namespace App\Domain;
 
 use App\Domain\Rule\FizzBuzzRuleInterface;
 
+/**
+ * Core FizzBuzz algorithm using Strategy pattern
+ *
+ * This class is framework-agnostic and contains pure business logic.
+ * Rules can be composed to create custom FizzBuzz variants.
+ *
+ * Complexity: O(n) where n is the limit
+ */
 final class FizzBuzzAlgorithm
 {
     /** @var FizzBuzzRuleInterface[] */
@@ -17,9 +25,11 @@ final class FizzBuzzAlgorithm
     }
 
     /**
-     * Generate FizzBuzz sequence from 1 to limit.
+     * Generate FizzBuzz sequence from 1 to limit
      *
-     * @return string[]
+     * @param int $limit Upper bound (inclusive)
+     *
+     * @return string[] Array of strings representing the sequence
      */
     public function generate(int $limit): array
     {
@@ -31,6 +41,16 @@ final class FizzBuzzAlgorithm
         return $result;
     }
 
+    /**
+     * Apply all rules to a number and return the result
+     *
+     * If no rules match, return the number itself as a string.
+     * If multiple rules match, concatenate their replacements.
+     *
+     * @param int $number Number to process
+     *
+     * @return string The transformed value
+     */
     private function applyRules(int $number): string
     {
         $output = '';

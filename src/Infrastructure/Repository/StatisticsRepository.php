@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Infrastructure\Repository;
@@ -6,86 +7,130 @@ namespace App\Infrastructure\Repository;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
-final class StatisticsRepository
+/**
+ * Repository for persisting and retrieving request statistics
+ *
+ * Uses two-tier caching: in-memory (Symfony Cache) + file-based persistence.
+ * This provides fast reads while maintaining durability.
+ *
+ * Note: For production with MULTIPLE servers, we could use Redis for shared statistics.
+ * This file-based approach is sufficient for single-instance deployments.
+ */
+final readonly class StatisticsRepository
 {
     private const CACHE_KEY = 'fizzbuzz_statistics';
     private const CACHE_TTL = 3600; // 1 hour
 
     public function __construct(
-        private readonly CacheInterface $cache,
-        private readonly string $statsFilePath
-    ) {}
+        private CacheInterface $cache,
+        private string $statsFilePath
+    ) {
+    }
 
+    /**
+     * Increment request count for given parameters
+     *
+     * @param array<string, int|string> $parameters Request parameters
+     */
     public function incrementRequestCount(array $parameters): void
     {
         $stats = $this->loadStats();
         $key = $this->hashParameters($parameters);
-        
+
         if (!isset($stats[$key])) {
             $stats[$key] = [
                 'parameters' => $parameters,
                 'count' => 0,
             ];
         }
-        
-        $stats[$key]['count']++;
-        
+
+        ++$stats[$key]['count'];
+
         $this->saveStats($stats);
     }
 
+    /**
+     * Get the most frequently requested parameters
+     *
+     * @return array{parameters: array<string, int|string>, count: int}|null
+     */
     public function getMostFrequent(): ?array
     {
         $stats = $this->loadStats();
-        
-        if (empty($stats)) {
+
+        if ([] === $stats) {
             return null;
         }
-        
-        $maxStat = array_reduce($stats, function (?array $carry, array $stat) {
-            return ($carry === null || $stat['count'] > $carry['count']) ? $stat : $carry;
-        }, null);
-        
+
+        // Find entry with highest count
+        $maxStat = \array_reduce(
+            $stats,
+            static function (?array $carry, array $stat) {
+                return (null === $carry || $stat['count'] > $carry['count']) ? $stat : $carry;
+            },
+            null
+        );
+
+        /* @var array{parameters: array<string, int|string>, count: int}|null $maxStat */
         return $maxStat;
     }
 
+    /**
+     * Load statistics from cache or file
+     *
+     * @return array<string, array{parameters: array<string, int|string>, count: int}>
+     */
     private function loadStats(): array
     {
         return $this->cache->get(self::CACHE_KEY, function (ItemInterface $item) {
             $item->expiresAfter(self::CACHE_TTL);
-            
-            if (file_exists($this->statsFilePath)) {
-                $content = file_get_contents($this->statsFilePath);
-                return json_decode($content, true) ?? [];
+
+            if (\file_exists($this->statsFilePath)) {
+                $content = \Safe\file_get_contents($this->statsFilePath);
+
+                return \Safe\json_decode($content, true) ?? [];
             }
-            
+
             return [];
         });
     }
 
+    /**
+     * Save statistics to both cache and file
+     *
+     * @param array<string, array{parameters: array<string, int|string>, count: int}> $stats
+     */
     private function saveStats(array $stats): void
     {
-        // Save to cache
+        // Update cache
         $this->cache->delete(self::CACHE_KEY);
         $this->cache->get(self::CACHE_KEY, function (ItemInterface $item) use ($stats) {
             $item->expiresAfter(self::CACHE_TTL);
+
             return $stats;
         });
-        
-        // Persist to file
-        $directory = dirname($this->statsFilePath);
-        if (!is_dir($directory)) {
-            mkdir($directory, 0755, true);
+
+        // Persist to file for durability
+        $directory = \dirname($this->statsFilePath);
+        if (!\is_dir($directory)) {
+            \Safe\mkdir($directory, 0755, true);
         }
-        
-        file_put_contents(
+
+        \Safe\file_put_contents(
             $this->statsFilePath,
-            json_encode($stats, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+            \Safe\json_encode($stats, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
         );
     }
 
+    /**
+     * Generate consistent hash key for parameters
+     *
+     * @param array<string, int|string> $parameters
+     */
     private function hashParameters(array $parameters): string
     {
-        ksort($parameters);
-        return md5(json_encode($parameters));
+        \ksort($parameters); // Ensure consistent ordering
+
+        return \md5(\Safe\json_encode($parameters));
     }
 }

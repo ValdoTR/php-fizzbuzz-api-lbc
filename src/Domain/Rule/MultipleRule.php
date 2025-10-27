@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace App\Domain\Rule;
 
-final class MultipleRule implements FizzBuzzRuleInterface
+/**
+ * Rule that replaces multiples of a divisor with a string
+ *
+ * Example: MultipleRule(3, 'fizz') replaces 3, 6, 9, ... with 'fizz'
+ */
+final readonly class MultipleRule implements FizzBuzzRuleInterface
 {
     public function __construct(
-        private readonly int $divisor,
-        private readonly string $replacement,
+        private int $divisor,
+        private string $replacement
     ) {
     }
 

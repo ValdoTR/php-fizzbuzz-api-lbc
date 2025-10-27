@@ -7,17 +7,24 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "nelmio/api-doc-bundle": "*",
+        "symfony/asset": "7.3.*",
         "symfony/cache": "^7.3",
         "symfony/console": "^7.3",
         "symfony/dotenv": "^7.3",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "7.3.*",
         "symfony/http-foundation": "^7.3",
+        "symfony/monolog-bundle": "*",
         "symfony/routing": "^7.3",
         "symfony/runtime": "^7.3",
         "symfony/serializer": "^7.3",
+        "symfony/twig-bundle": "7.3.*",
         "symfony/validator": "^7.3",
-        "symfony/yaml": "^7.3"
+        "symfony/yaml": "^7.3",
+        "thecodingmachine/safe": "^3.3",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
     },
     "config": {
         "allow-plugins": {
@@ -49,6 +56,16 @@
         "symfony/polyfill-php82": "*"
     },
     "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test:unit": "vendor/bin/phpunit tests/Unit",
+        "test:int": "vendor/bin/phpunit tests/Integration",
+        "code:analyse": "vendor/bin/phpstan analyse --memory-limit 1G",
+        "code:analyse:check": "vendor/bin/phpstan analyse --dry-run --memory-limit 1G",
+        "code:lint": "vendor/bin/php-cs-fixer fix",
+        "code:lint:check": "vendor/bin/php-cs-fixer fix --dry-run",
+        "code:refactor": "vendor/bin/rector process",
+        "code:refactor:check": "vendor/bin/rector process --dry-run",
+        "code:refactor:safe": "vendor/bin/rector process src tests --config vendor/thecodingmachine/safe/rector-migrate.php",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
@@ -73,8 +90,10 @@
         "friendsofphp/php-cs-fixer": "^3.89",
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^12.4",
+        "rector/rector": "*",
         "symfony/browser-kit": "7.3.*",
         "symfony/css-selector": "7.3.*",
-        "symfony/phpunit-bridge": "^7.3"
+        "symfony/phpunit-bridge": "^7.3",
+        "thecodingmachine/phpstan-safe-rule": "^1.4"
     }
 }
