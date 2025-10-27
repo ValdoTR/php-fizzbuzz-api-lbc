@@ -1,0 +1,17 @@
+.git
+.gitignore
+.env.dev
+.env.test
+/var/*
+vendor/
+tests/
+.php-cs-fixer.cache
+.phpunit.result.cache
+docs/
+*.md
+*.log
+
+# Ignore Docker-related files
+docker/
+docker-compose.yml
+.dockerignore
