@@ -59,6 +59,7 @@
         "test": "vendor/bin/phpunit",
         "test:unit": "vendor/bin/phpunit tests/Unit",
         "test:int": "vendor/bin/phpunit tests/Integration",
+        "test:coverage": "vendor/bin/phpunit --coverage-text",
         "code:analyse": "vendor/bin/phpstan analyse --memory-limit 1G",
         "code:analyse:check": "vendor/bin/phpstan analyse --dry-run --memory-limit 1G",
         "code:lint": "vendor/bin/php-cs-fixer fix",
