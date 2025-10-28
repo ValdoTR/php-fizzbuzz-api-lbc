@@ -1,5 +1,8 @@
 # FizzBuzz REST API
 
+[![PHP CI](https://github.com/ValdoTR/php-fizzbuzz-api-lbc/actions/workflows/ci.yml/badge.svg)](https://github.com/ValdoTR/php-fizzbuzz-api-lbc/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/github/ValdoTR/php-fizzbuzz-api-lbc/graph/badge.svg?token=GY9CRU3VPS)](https://codecov.io/github/ValdoTR/php-fizzbuzz-api-lbc)
+
 A production-ready REST API implementing a generalized FizzBuzz algorithm with request statistics tracking.
 
 ## Project Overview
