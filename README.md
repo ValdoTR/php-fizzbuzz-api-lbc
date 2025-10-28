@@ -11,7 +11,7 @@ A production-ready REST API implementing a generalized FizzBuzz algorithm with r
 
 **🛠️ Technology Stack:**
 
-- **PHP 8.2+** with strict types
+- **PHP 8.3+** with strict types
 - **Symfony 7.3** framework
 - **Docker** for containerization
 
