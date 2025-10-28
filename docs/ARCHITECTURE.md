@@ -467,13 +467,42 @@ tests/
 - **Dev:** Full stack traces in JSON
 - **Prod:** Generic error messages only
 
-### CORS
+### Nginx
 
-⚠️ Not configured by default (add if needed)
+Nginx security measures:
+
+- `X-Frame-Options: "SAMEORIGIN"`
+This header prevents clickjacking attacks by ensuring that your content can only be displayed in a frame on the same origin as your site. This means that your site can't be embedded in a malicious website's frame.
+
+- `X-Content-Type-Options: "nosniff"`
+This header stops browsers from MIME-type sniffing. By setting it to "nosniff," it ensures that browsers strictly adhere to the declared content type, preventing them from interpreting files as something they're not, which can help mitigate risk from certain types of attacks.
+
+- `X-XSS-Protection: "1; mode=block"`
+This header enables the browser's built-in XSS (Cross-Site Scripting) protection. When set to "block," it tells the browser to prevent rendering of the page if an XSS attack is detected, helping to protect sensitive data from being stolen.
+
+- `server_tokens off;`
+Prevent Nginx from revealing its version number, which can help reduce exposure to targeted attacks.
+
+- `location ~ /\. { deny all; }`
+Deny access to sensitive files such as .htaccess, .git, and more.
 
 ### Rate Limiting
 
-⚠️ Not implemented (add for public APIs)
+We use [Nginx rate limiting](https://blog.nginx.org/blog/rate-limiting-nginx) for infrastructure-level protection (DoS, brute force).
+
+We use `limit_req_zone` and `limit_req` directives:
+
+```conf
+# Rate limiting per client IP
+    # Each IP address can make 5 r/s
+    # All IP addresses can store request states until 10MB memory (~160k states)
+    limit_req_zone $binary_remote_addr zone=api_limit:10m rate=5r/s;
+
+# Apply Rate limiting to /api and all sub-routes
+    # Allow 12 more r/s to allow short spikes
+    # Prevent exceeding requests with a 8-times delay (queue)
+    limit_req zone=api_limit burst=12 delay=8;
+```
 
 ## Technology Choices
 
@@ -495,7 +524,7 @@ tests/
 1. **Authentication**
    - JWT tokens
    - API keys
-   - Rate limiting per user
+   - Application-level (like API key) rate limiting with [Symfony RateLimiter](https://symfony.com/doc/current/rate_limiter.html)
 
 2. **Advanced Statistics**
     - Top 10 most requested parameters
