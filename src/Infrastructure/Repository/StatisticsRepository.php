@@ -63,6 +63,7 @@ final readonly class StatisticsRepository
         }
 
         // Find entry with highest count
+        /** @var array{parameters: array<string, int|string>, count: int}|null $maxStat */
         $maxStat = \array_reduce(
             $stats,
             static function (?array $carry, array $stat) {
@@ -71,7 +72,6 @@ final readonly class StatisticsRepository
             null
         );
 
-        /* @var array{parameters: array<string, int|string>, count: int}|null $maxStat */
         return $maxStat;
     }
 
