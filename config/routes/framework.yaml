@@ -3,9 +3,17 @@ when@dev:
         resource: "@FrameworkBundle/Resources/config/routing/errors.php"
         prefix: /_error
 
-# Enable attribute routing for controllers
+# Enable attribute routing for controllers on a custom path
 custom_controllers_path:
     resource:
         path: ../../src/Presentation/Controller/
         namespace: App\Presentation\Controller
     type: attribute
+
+# Redirect home to Swagger
+home_redirect:
+    path: /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController
+    defaults:
+        path: /api/doc
+        permanent: true
