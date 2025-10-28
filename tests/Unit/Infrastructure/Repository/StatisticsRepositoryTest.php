@@ -202,7 +202,8 @@ final class StatisticsRepositoryTest extends TestCase
         $this->repository->incrementRequestCount($params2);
 
         $stats = $this->repository->getMostFrequent();
-
+        $this->assertIsArray($stats);
+        $this->assertArrayHasKey('count', $stats);
         // Should be treated as same request (count = 2)
         $this->assertEquals(2, $stats['count']);
     }
@@ -217,7 +218,8 @@ final class StatisticsRepositoryTest extends TestCase
 
         // Create new repository to force file load
         $cache = new ArrayAdapter();
-        new StatisticsRepository($cache, $this->statsFile);
+
+        $this->repository = new StatisticsRepository($cache, $this->statsFile);
 
         $content = \Safe\file_get_contents($this->statsFile);
         $data = \Safe\json_decode($content, true);

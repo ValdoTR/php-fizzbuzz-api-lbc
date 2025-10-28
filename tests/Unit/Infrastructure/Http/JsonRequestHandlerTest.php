@@ -21,8 +21,8 @@ final class JsonRequestHandlerTest extends TestCase
     public function testDecodeValidJson(): void
     {
         $request = new Request(
-            content: '{"name":"Valdo","age":33}',
-            server: ['CONTENT_TYPE' => 'application/json']
+            server: ['CONTENT_TYPE' => 'application/json'],
+            content: '{"name":"Valdo","age":33}'
         );
 
         $data = $this->handler->decode($request);
@@ -33,8 +33,8 @@ final class JsonRequestHandlerTest extends TestCase
     public function testThrowsOnNonJsonContentType(): void
     {
         $request = new Request(
-            content: '{"name":"Valdo"}',
-            server: ['CONTENT_TYPE' => 'text/plain']
+            server: ['CONTENT_TYPE' => 'text/plain'],
+            content: '{"name":"Valdo"}'
         );
 
         $this->expectException(BadRequestHttpException::class);
@@ -46,8 +46,8 @@ final class JsonRequestHandlerTest extends TestCase
     public function testThrowsOnEmptyBody(): void
     {
         $request = new Request(
-            content: '',
-            server: ['CONTENT_TYPE' => 'application/json']
+            server: ['CONTENT_TYPE' => 'application/json'],
+            content: ''
         );
 
         $this->expectException(BadRequestHttpException::class);
@@ -59,8 +59,8 @@ final class JsonRequestHandlerTest extends TestCase
     public function testThrowsOnInvalidJson(): void
     {
         $request = new Request(
-            content: '{"invalid_json": "missing_end"',
-            server: ['CONTENT_TYPE' => 'application/json']
+            server: ['CONTENT_TYPE' => 'application/json'],
+            content: '{"invalid_json": "missing_end"'
         );
 
         $this->expectException(BadRequestHttpException::class);
@@ -72,8 +72,8 @@ final class JsonRequestHandlerTest extends TestCase
     public function testThrowsWhenJsonIsNotAnObject(): void
     {
         $request = new Request(
-            content: '"a simple string"',
-            server: ['CONTENT_TYPE' => 'application/json']
+            server: ['CONTENT_TYPE' => 'application/json'],
+            content: '"a simple string"'
         );
 
         $this->expectException(BadRequestHttpException::class);

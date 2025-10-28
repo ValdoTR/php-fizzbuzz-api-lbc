@@ -101,7 +101,7 @@ final class ApiExceptionListenerTest extends TestCase
         $this->assertNotNull($response);
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
 
-        $content = \json_decode($response->getContent(), true);
+        $content = \Safe\json_decode((string) $response->getContent(), true);
         $this->assertEquals('error', $content['status']);
         $this->assertEquals('Validation failed', $content['message']);
         $this->assertArrayHasKey('errors', $content);
@@ -130,7 +130,7 @@ final class ApiExceptionListenerTest extends TestCase
         $this->assertNotNull($response);
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
 
-        $content = \json_decode($response->getContent(), true);
+        $content = \Safe\json_decode((string) $response->getContent(), true);
         $this->assertEquals('error', $content['status']);
         $this->assertEquals('Invalid input provided', $content['message']);
     }
@@ -157,7 +157,7 @@ final class ApiExceptionListenerTest extends TestCase
         $this->assertNotNull($response);
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
 
-        $content = \json_decode($response->getContent(), true);
+        $content = \Safe\json_decode((string) $response->getContent(), true);
         $this->assertEquals('error', $content['status']);
         $this->assertEquals('Route not found', $content['message']);
     }
@@ -184,7 +184,7 @@ final class ApiExceptionListenerTest extends TestCase
         $this->assertNotNull($response);
         $this->assertEquals(Response::HTTP_METHOD_NOT_ALLOWED, $response->getStatusCode());
 
-        $content = \json_decode($response->getContent(), true);
+        $content = \Safe\json_decode((string) $response->getContent(), true);
         $this->assertEquals('error', $content['status']);
     }
 }
