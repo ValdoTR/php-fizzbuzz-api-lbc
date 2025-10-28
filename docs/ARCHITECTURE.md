@@ -389,9 +389,9 @@ public function onKernelException(ExceptionEvent $event): void
 |-------|--------|--------|
 | Domain | 100% | 100% ✅ |
 | Application | >80% | 100% ✅ |
-| Infrastructure | >80% | 80% ✅ |
+| Infrastructure | >80% | 88% ✅ |
 | Presentation | >80% | 100% ✅ |
-| **Overall** | **>85%** | **95%** ✅ |
+| **Overall** | **>85%** | **93%** ✅ |
 
 ### Test Organization
 
