@@ -8,7 +8,7 @@ on:
 
 jobs:
   tests:
-    name: Tests & Quality (PHP ${{ matrix.php-version }})
+    name: Tests on ${{ matrix.operating-system }} with PHP ${{ matrix.php-version }}
     runs-on: ${{ matrix.operating-system }}
 
     strategy:
@@ -32,18 +32,14 @@ jobs:
       - name: Validate composer.json
         run: composer validate --strict
 
-      - name: Get composer cache directory
+      - name: Cache Composer packages
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
-          path: |
-            vendor
-            ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          key: ${{ runner.os }}-php-${{ matrix.php-version }}-deps-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-php-${{ matrix.php-version }}-deps-
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
