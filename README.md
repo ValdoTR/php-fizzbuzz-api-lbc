@@ -2,6 +2,7 @@
 
 [![PHP CI](https://github.com/ValdoTR/php-fizzbuzz-api-lbc/actions/workflows/ci.yml/badge.svg)](https://github.com/ValdoTR/php-fizzbuzz-api-lbc/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/github/ValdoTR/php-fizzbuzz-api-lbc/graph/badge.svg?token=GY9CRU3VPS)](https://codecov.io/github/ValdoTR/php-fizzbuzz-api-lbc)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 A production-ready REST API implementing a generalized FizzBuzz algorithm with request statistics tracking.
 
@@ -20,6 +21,7 @@ A production-ready REST API implementing a generalized FizzBuzz algorithm with r
 
 **🎓 Code quality:**
 
+- **Cross-Platform CI**: Tested on Ubuntu and macOS with PHP 8.3 and 8.4
 - **Layered Architecture** - Domain-driven design with clear layers separation
 - **SOLID Principles** - Extensible and maintainable codebase
 - **Design Patterns** - Strategy, Repository, Dependency Injection

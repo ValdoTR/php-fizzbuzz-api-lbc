@@ -65,7 +65,6 @@
         "test:coverage:html": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-html var/coverage",
         "test:coverage:xml": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover var/coverage.xml",
         "code:analyse": "vendor/bin/phpstan analyse --xdebug --memory-limit 1G",
-        "code:analyse:check": "vendor/bin/phpstan analyse --quiet --xdebug --memory-limit 1G",
         "code:lint": "vendor/bin/php-cs-fixer fix",
         "code:lint:check": "vendor/bin/php-cs-fixer fix --dry-run",
         "code:refactor": "vendor/bin/rector process",

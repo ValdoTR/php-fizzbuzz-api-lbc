@@ -10,6 +10,7 @@ Complete guide for setting up, developing, and maintaining the FizzBuzz REST API
 - [Development Workflow](#development-workflow)
 - [Debugging](#debugging)
 - [Good practices](#good-practices)
+- [Continuous Integration](#continuous-integration)
 - [Resources](#resources)
 
 ## Prerequisites
@@ -23,11 +24,14 @@ If you choose option B, check [Symfony's technical requirements](https://symfony
 
 ## Pre-commit Checklist
 
-Before committing code:
+Even if the project CI handles automated tests, it's always a good practice to run them locally before commiting code.
 
-- [ ] All tests pass
+You should check that:
+
+- [ ] PHPUnit passes
 - [ ] PHPStan passes
-- [ ] Code style fixed
+- [ ] PHP-CS-Fixer passes
+- [ ] Rector passes
 - [ ] New tests added for new features
 - [ ] Documentation updated if needed
 
@@ -84,9 +88,6 @@ vendor/bin/phpunit --filter testClassicFizzBuzz
 ```bash
 # Static analysis fix (PHPStan level 8)
 composer code:analyse
-
-# Static analysis check
-composer code:analyse:check
 
 # Analyze specific file
 vendor/bin/phpstan analyse src/Domain/FizzBuzzAlgorithm.php
@@ -237,6 +238,39 @@ Mark classes `final` unless designed for extension:
 ```php
 final class MyService
 ```
+
+## Continuous Integration
+
+This project uses GitHub Actions to ensure code quality.
+
+The CI workflow runs on:
+
+- **Events**: Push to `main`, Pull Requests on `main`
+- **Operating Systems**: Ubuntu (latest), macOS (latest)
+- **PHP Versions**: 8.3, 8.4
+- **Matrix**: 4 combinations (2 OS × 2 PHP versions)
+
+### What Gets Tested
+
+**1. Dependency Validation:**
+    - Validates composer.json structure
+    - Checks for security vulnerabilities
+    - Verifies lock file is up to date
+
+**2. Test Suite:**
+    - Unit tests
+    - Integration tests
+    - Code coverage reporting (with CodeCov badge)
+
+**3. Static Analysis:**
+    - PHPStan level 8
+    - Type safety verification
+    - Dead code detection
+
+**4. Code Style:**
+    - PSR-12 compliance
+    - Symfony conventions
+    - PHP-CS-Fixer rules
 
 ## Resources
 

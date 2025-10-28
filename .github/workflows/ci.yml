@@ -64,7 +64,7 @@ jobs:
           verbose: true
 
       - name: Run PHPStan
-        run: composer code:analyse:check
+        run: composer code:analyse
 
       - name: Run PHP-CS-Fixer
         run: composer code:lint:check
